@@ -16,4 +16,19 @@ const otpSchema = new mongoose.Schema({
     }
 });
 
+async function sendVerificationEmail(email,otp){
+    try{
+        const mailResponse = await mailSender(email, "Verification email from Coursehub", otp);
+    }
+    catch(error){
+        console.log("Error occured while sending emails",error);
+        throw error;
+    }
+}
+
+otpSchema.pre("save", async function(next){
+    await sendVerificationEmail(this.email,this.otp);
+    next();
+});
+
 module.exports = mongoose.model("OTP", otpSchema);
