@@ -2,7 +2,8 @@ const User = require("../models/User");
 const OTP = require("../models/OTP");
 const otpGenerator = require("otp-generator");
 const bcrypt = require("bcryptjs");
-
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
 // sendOTP
 exports.sendOTP = async (req,res ) => {
@@ -165,6 +166,72 @@ exports.signup = async (req,res) => {
 
 
 // login
+exports.login = async (req,res) => {
+    try{
+        // get the data from body of request
+        const {email,password} = req.body;
 
+        // data validation
+        if(!email || !password){
+            return res.status(403).json({
+                success:false,
+                message: 'Please provide email and password',
+            }); 
+        }
+
+        // check if user exist or not 
+        const user = await User.findOne({email}).populate("additionalDetails");
+        if(!user){
+            return res.status(401).json({
+                success:false,
+                message: 'User not found. Please Signup first',
+            });
+        }
+
+        // generate JWT token 
+        if(await bcrypt.compare(password, user.password)){
+            const payload = {
+                email: user.email,
+                id: user._id,
+                role: user.role,
+            }
+            const token = jwt.sign(payload, process.env.JWT_SECRET,{
+                expiresIn: "2h",
+            });
+            user.token = token;
+            user.password = undefined;
+
+
+
+        // create cookie and send response
+        const options = {
+            expires: new Date(Date.now() + 3*24*60*60*1000),
+            httpOnly: true,
+        }
+        res.cookie("token", token, options).status(200).json({
+            success: true,
+            token,
+            user,
+            message: 'Login successful',
+
+        });
+
+        } else {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid credentials',
+            });
+        }
+
+
+    } catch(error){
+        console.log(error);
+        return res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+        });
+
+    }
+};
 
 // changePassword
