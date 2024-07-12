@@ -117,4 +117,42 @@ exports.updateSubSection = async (req, res) => {
         message: "An error occurred while updating the section",
       })
     }
-  }
+  };
+
+
+
+ //deleteSubSection => handler function
+ exports.deleteSubSection = async (req, res) => {
+    try {
+      const { subSectionId, sectionId } = req.body
+      await Section.findByIdAndUpdate(
+        { _id: sectionId },
+        {
+          $pull: {
+            subSection: subSectionId,
+          },
+        }
+      )
+      const subSection = await SubSection.findByIdAndDelete({ _id: subSectionId })
+  
+      if (!subSection) {
+        return res
+          .status(404)
+          .json({ success: false, message: "SubSection not found" })
+      }
+
+      const updatedSection = await Section.findById(sectionId).populate("subSection")
+  
+      return res.json({
+        success: true,
+        data: updatedSection,
+        message: "SubSection deleted successfully",
+      })
+    } catch (error) {
+      console.error(error)
+      return res.status(500).json({
+        success: false,
+        message: "An error occurred while deleting the SubSection",
+      })
+    }
+  };
