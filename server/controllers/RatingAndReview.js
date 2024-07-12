@@ -68,4 +68,50 @@ exports.createRating = async (req, res) => {
             message:error.message,
         })
     }
-}
+};
+
+
+//avgRating => handler function
+exports.getAverageRating = async (req, res) => {
+    try{
+        //course id
+        const courseId = req.body.courseId;
+
+        //calculating.. average rating
+        const result = await RatingAndReview.aggregate([
+            {
+                $match:{
+                    course : new mongoose.Types.ObjectId(courseId),
+                },
+            },
+            {
+                $group:{
+                    _id: null,
+                    averageRating:{ $avg : "$rating"},
+                }
+            }
+        ])
+
+        //returning.. final response
+        if(result.length > 0){
+            return res.status(200).json({
+                success:true,
+                averageRating : result[0].averageRating,
+            })
+        }
+
+        //if no rating has been done
+        return res.status(200).json({
+            success:true,
+            message: " rating is not been given yet for this course",
+            averageRating : 0,
+        })
+
+    } catch(error) {
+        console.log(error);
+        return res.status(500).json({
+            success:false,
+            message:error.message,
+        }) 
+    }
+};
