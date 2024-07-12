@@ -145,4 +145,4 @@ exports.deleteAccount = async (req, res) => {
         message: error.message,
       })
     }
-  }
+  };
