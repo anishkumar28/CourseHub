@@ -1,4 +1,5 @@
 const Course = require("../models/Course");
+const Category = require("../models/Category");
 const Tag = require("../models/Tags");
 const User = require("../models/User");
 const {uploadImageToCloudinary} = require("../utils/imageUploader");
@@ -56,7 +57,39 @@ exports.createCourse = async (req,res) => {
             thumbnail: thumbnailImage.secure_url,
         });
 
-    } catch (error){
+        // add the new course to the user schema of instructor 
+        await User.findByIdAndUpdate(
+            {_id: instructorDetails._id},
+            {
+                $push: {
+                    courses: newCourse._id,
+                }
+            },
+            {new: true},
+        );
 
+         // add the new course to the categories
+         const categoryDetails2 = await Category.findByIdAndUpdate(
+            { _id: category },
+            {
+              $push: {
+                courses: newCourse._id,
+              },
+            },
+            { new: true }
+          );
+
+        return res.status(200).json({
+            success: true,
+            message: "Course created successfully",
+        });
+
+    } catch (error){
+        console.error(error);
+        return res.status(400).json({
+            success: false,
+            message: "Failed to create course",
+            error: error.message,
+        });
     }
 }
