@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const { resetPasswordToken } = require("../controllers/ResetPassword");
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -26,7 +25,7 @@ const userSchema = new mongoose.Schema({
         enum: ["Admin", "Student", "Instructor"],
         required: true,
     },
-    lastName: {
+    additionalDetails: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: "Profile",
@@ -50,6 +49,10 @@ const userSchema = new mongoose.Schema({
         ref: "CourseProgress",
     },
     
-});
+},
+
+{ timestamps: true }
+
+);
 
 module.exports = mongoose.model("User", userSchema);
