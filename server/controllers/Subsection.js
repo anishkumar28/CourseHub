@@ -20,7 +20,7 @@ exports.createSubSection = async (req, res) => {
         //         message : "all fields are REQUIRED !!",
         //     })
         // }
-        if(!sectionId || !title || !description || !video){
+        if(!sectionId || !title || !timeDuration || !description || !video){
           return res.status(400).json({
               success : false,
               message : "all fields are REQUIRED !!",
