@@ -4,7 +4,7 @@ const User = require("../models/User");
 
 
 // auth
-const auth = async (req, res, next) => {
+exports.auth = async (req, res, next) => {
     try{
         // extract token
         const token = req.cookies.token 
@@ -44,7 +44,7 @@ const auth = async (req, res, next) => {
 
 
 // isStudent
-exports.isStudent = async (req,res) => {
+exports.isStudent = async (req,res, next) => {
     try{
        if(req.user.accountType !== "Student"){
         return res.status(401).json({
@@ -65,7 +65,7 @@ exports.isStudent = async (req,res) => {
 
 
 //isInstructor
-exports.isInstructor = async (req,res) => {
+exports.isInstructor = async (req,res, next) => {
     try{
        if(req.user.accountType !== "Instructor"){
         return res.status(401).json({
@@ -82,11 +82,11 @@ exports.isInstructor = async (req,res) => {
             message: 'User role not verified',
         });
     }
-}
+};
 
 
 // isAdmin
-exports.isAdmin = async (req,res) => {
+exports.isAdmin = async (req,res, next) => {
     try{
        if(req.user.accountType !== "Admin"){
         return res.status(401).json({
@@ -103,4 +103,4 @@ exports.isAdmin = async (req,res) => {
             message: 'User role not verified',
         });
     }
-}
+};
