@@ -24,7 +24,7 @@ function ReviewSlider() {
   const truncateWords = 15
 
   useEffect(() => {
-    ;(async () => {
+    (async () => {
       const { data } = await apiConnector(
         "GET",
         ratingsEndpoints.REVIEWS_DETAILS_API

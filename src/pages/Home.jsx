@@ -102,7 +102,7 @@ const Home = () => {
                     // imgPos = {"-top-[40%] right-[8%]"}
                     heading={
                         <div className='text-4xl font-semibold'>
-                            Unlock Your
+                            Unlock your
                             <HighlightText text={"coding potential"}/>
                             {" "} with our online courses
                         </div>
