@@ -21,9 +21,10 @@ It allows users to browse, enroll, and track courses with a clean and responsive
 **Database:** MySQL / MongoDB  
 **Others:** REST API, Git, Postman  
 
+<!-- 
 ---
 
-<!-- ## 📸 Screenshots
+ ## 📸 Screenshots
 
 Add your project screenshots here:  
 
