@@ -45,7 +45,7 @@ Add your project screenshots here:
 
 1. Clone the repo:
    ```bash
-   git clone https://github.com/your-username/coursehub.git
+   git clone https://github.com/anishkumar28/coursehub.git
    cd coursehub
    ```
 
